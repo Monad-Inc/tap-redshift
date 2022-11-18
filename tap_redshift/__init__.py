@@ -76,20 +76,20 @@ def discover_catalog(conn, db_schema):
         conn,
         """
         SELECT table_name, table_type
-        FROM INFORMATION_SCHEMA.Tables
-        WHERE table_schema = '{}'
+        FROM SVV_ALL_TABLES
+        WHERE schema_name = '{}'
         """.format(db_schema))
 
     column_specs = select_all(
         conn,
         """
-        SELECT c.table_name, c.ordinal_position, c.column_name, c.udt_name,
+        SELECT c.table_name, c.ordinal_position, c.column_name, c.data_type,
         c.is_nullable
-        FROM INFORMATION_SCHEMA.Tables t
-        JOIN INFORMATION_SCHEMA.Columns c
+        FROM SVV_ALL_TABLES t
+        JOIN SVV_ALL_COLUMNS c
             ON c.table_name = t.table_name AND
-               c.table_schema = t.table_schema
-        WHERE t.table_schema = '{}'
+               c.schema_name = t.schema_name
+        WHERE t.schema_name = '{}'
         ORDER BY c.table_name, c.ordinal_position
         """.format(db_schema))
 
@@ -156,6 +156,7 @@ def do_discover(conn, db_schema):
     LOGGER.info("Completed discover")
 
 
+# TODO: need to review after adding changing the columns table
 def schema_for_column(c):
     '''Returns the Schema object for the given Column.'''
     column_type = c['type'].lower()
