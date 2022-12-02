@@ -159,7 +159,6 @@ def do_discover(conn, db_schema):
     LOGGER.info("Completed discover")
 
 
-# TODO: need to review after adding changing the columns table
 def schema_for_column(c):
     '''Returns the Schema object for the given Column.'''
     column_type = c['type'].lower()
