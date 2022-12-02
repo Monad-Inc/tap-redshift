@@ -51,7 +51,7 @@ setup(
         'pendulum>=1.2.0<2.0.0',
         'singer-python>=5.12.2<6.0.0',
         'backoff>=1.3.2<2.0.0',
-        'psycopg2>=2.9.3<3.0.0',
+        'psycopg2-binary>=2.9.3<2.9.5',
       ],
       setup_requires=[
         'pytest-runner>=2.11,<3.0a',
