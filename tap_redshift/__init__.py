@@ -54,12 +54,15 @@ STRING_TYPES = {'char', 'character', 'nchar', 'bpchar', 'text', 'varchar',
 
 BYTES_FOR_INTEGER_TYPE = {
     'int2': 2,
+    'smallint': 2,
     'int': 4,
     'int4': 4,
-    'int8': 8
+    'integer': 4,
+    'int8': 8,
+    'bigint': 8
 }
 
-FLOAT_TYPES = {'float', 'float4', 'float8'}
+FLOAT_TYPES = {'float', 'float4', 'float8', 'double precision', 'real'}
 
 DATE_TYPES = {'date'}
 
@@ -156,7 +159,6 @@ def do_discover(conn, db_schema):
     LOGGER.info("Completed discover")
 
 
-# TODO: need to review after adding changing the columns table
 def schema_for_column(c):
     '''Returns the Schema object for the given Column.'''
     column_type = c['type'].lower()
@@ -164,7 +166,7 @@ def schema_for_column(c):
     inclusion = 'available'
     result = Schema(inclusion=inclusion)
 
-    if column_type == 'bool':
+    if column_type in ('bool', 'boolean'):
         result.type = 'boolean'
 
     elif column_type in BYTES_FOR_INTEGER_TYPE:
