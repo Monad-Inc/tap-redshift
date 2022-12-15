@@ -54,12 +54,15 @@ STRING_TYPES = {'char', 'character', 'nchar', 'bpchar', 'text', 'varchar',
 
 BYTES_FOR_INTEGER_TYPE = {
     'int2': 2,
+    'smallint': 2,
     'int': 4,
     'int4': 4,
-    'int8': 8
+    'integer': 4,
+    'int8': 8,
+    'bigint': 8
 }
 
-FLOAT_TYPES = {'float', 'float4', 'float8'}
+FLOAT_TYPES = {'float', 'float4', 'float8', 'double precision', 'real'}
 
 DATE_TYPES = {'date'}
 
@@ -76,20 +79,20 @@ def discover_catalog(conn, db_schema):
         conn,
         """
         SELECT table_name, table_type
-        FROM INFORMATION_SCHEMA.Tables
-        WHERE table_schema = '{}'
+        FROM SVV_ALL_TABLES
+        WHERE schema_name = '{}'
         """.format(db_schema))
 
     column_specs = select_all(
         conn,
         """
-        SELECT c.table_name, c.ordinal_position, c.column_name, c.udt_name,
+        SELECT c.table_name, c.ordinal_position, c.column_name, c.data_type,
         c.is_nullable
-        FROM INFORMATION_SCHEMA.Tables t
-        JOIN INFORMATION_SCHEMA.Columns c
+        FROM SVV_ALL_TABLES t
+        JOIN SVV_ALL_COLUMNS c
             ON c.table_name = t.table_name AND
-               c.table_schema = t.table_schema
-        WHERE t.table_schema = '{}'
+               c.schema_name = t.schema_name
+        WHERE t.schema_name = '{}'
         ORDER BY c.table_name, c.ordinal_position
         """.format(db_schema))
 
@@ -163,7 +166,7 @@ def schema_for_column(c):
     inclusion = 'available'
     result = Schema(inclusion=inclusion)
 
-    if column_type == 'bool':
+    if column_type in ('bool', 'boolean'):
         result.type = 'boolean'
 
     elif column_type in BYTES_FOR_INTEGER_TYPE:
