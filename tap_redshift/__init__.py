@@ -18,6 +18,7 @@
 # data.world, Inc.(http://data.world/).
 
 import copy
+import logging
 import time
 from itertools import groupby
 
@@ -123,6 +124,8 @@ def discover_catalog(conn, db_name, db_schema):
                  for k, v in groupby(pk_specs, key=lambda t: t[0])}
 
     table_types = dict(table_spec)
+
+    logging.INFO(table_columns)
 
     for items in table_columns:
         table_name = items['name']
