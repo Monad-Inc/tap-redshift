@@ -124,11 +124,6 @@ def discover_catalog(conn, db_name, db_schema):
 
     table_types = dict(table_spec)
 
-    LOGGER.info(f"""Spec query: SELECT table_name, table_type
-        FROM SVV_ALL_TABLES
-        WHERE schema_name = '{db_schema}' and database_name = '{db_name}'""")
-    LOGGER.info(f'Table Spec: {table_spec}')
-
     for items in table_columns:
         table_name = items['name']
         qualified_table_name = '{}.{}'.format(db_schema, table_name)
