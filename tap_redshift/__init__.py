@@ -124,6 +124,8 @@ def discover_catalog(conn, db_name, db_schema):
 
     table_types = dict(table_spec)
 
+    LOGGER.INFO(table_columns)
+
     for items in table_columns:
         table_name = items['name']
         qualified_table_name = '{}.{}'.format(db_schema, table_name)
