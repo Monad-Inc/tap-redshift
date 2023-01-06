@@ -405,6 +405,9 @@ def sync_table(connection, catalog_entry, state, limit):
                         yield singer.StateMessage(value=copy.deepcopy(state))
                     row = cursor.fetchone()
 
+            if limit <= 0:
+                break
+
             params['offset'] += params['limit']
 
         if not replication_key:
