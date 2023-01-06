@@ -83,6 +83,7 @@ def column_specs_cursor():
 def expected_catalog_from_db():
     return Catalog.from_dict({'streams': [
         {'tap_stream_id': 'test-db.public.table1',
+         'database_name': 'test-db',
          'table_name': 'public.table1',
          'schema': {
              'properties': {
@@ -139,6 +140,7 @@ def expected_catalog_from_db():
                            'inclusion': 'available'}}
          ]},
         {'tap_stream_id': 'test-db.public.table2',
+         'database_name': 'test-db',
          'table_name': 'public.table2',
          'schema': {
              'properties': {
@@ -173,6 +175,7 @@ def expected_catalog_from_db():
                            'sql-datatype': 'bool',
                            'inclusion': 'available'}}]},
         {'tap_stream_id': 'test-db.public.view1',
+         'database_name': 'test-db',
          'table_name': 'public.view1',
          'schema': {
              'properties': {
