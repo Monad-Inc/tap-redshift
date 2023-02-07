@@ -69,7 +69,7 @@ DATETIME_TYPES = {'timestamp', 'timestamptz',
 
 CONFIG = {}
 
-ROWS_PER_NETWORK_CALL = 20_000
+ROWS_PER_NETWORK_CALL = 70_000
 
 
 def discover_catalog(conn, db_schema):
