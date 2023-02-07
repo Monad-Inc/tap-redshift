@@ -68,6 +68,8 @@ DATETIME_TYPES = {'timestamp', 'timestamptz',
 
 CONFIG = {}
 
+ROWS_PER_NETWORK_CALL = 70_000
+
 
 def discover_catalog(conn, db_schema):
     '''Returns a Catalog describing the structure of the database.'''
@@ -368,7 +370,7 @@ def sync_table(connection, catalog_entry, state):
         query_string = cursor.mogrify(select, params)
         LOGGER.info('Running {}'.format(query_string))
 
-        cursor.itersize = 100_000
+        cursor.itersize = ROWS_PER_NETWORK_CALL
 
         cursor.execute(select, params)
         row = cursor.fetchone()
