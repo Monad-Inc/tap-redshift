@@ -69,7 +69,7 @@ DATETIME_TYPES = {'timestamp', 'timestamptz',
 
 CONFIG = {}
 
-ROWS_PER_NETWORK_CALL = 70_000
+ROWS_PER_NETWORK_CALL = 40_000
 
 
 def discover_catalog(conn, db_schema):
@@ -373,13 +373,12 @@ def sync_table(connection, catalog_entry, state):
 
         cursor.itersize = ROWS_PER_NETWORK_CALL
         cursor.execute(select, params)
-        row = cursor.fetchone()
         rows_saved = 0
 
         with metrics.record_counter(None) as counter:
             counter.tags['database'] = catalog_entry.database
             counter.tags['table'] = catalog_entry.table
-            while row:
+            for row in cursor:
                 counter.increment()
                 rows_saved += 1
                 record_message = row_to_record(catalog_entry,
@@ -397,7 +396,6 @@ def sync_table(connection, catalog_entry, state):
                                                       replication_key])
                 if rows_saved % 1000 == 0:
                     yield singer.StateMessage(value=copy.deepcopy(state))
-                row = cursor.fetchone()
 
         if not replication_key:
             yield activate_version_message
